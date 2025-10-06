@@ -1,17 +1,13 @@
 package com.pluralsight;
 
-import java.util.Scanner;
-
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
 
-    private static Vehicle[] inventory = new Vehicle[20];
-
+    private static Vehicle[] inventory = new Vehicle[20]; //addresses 0 through 19
+    private static int quantityOfVehicles;
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
-        int quantityOfVehicles;
+
+
 
         inventory[0] = new Vehicle(101121, "Ford Explorer", "Red", 45000, 13500);
         inventory[1] = new Vehicle(101122, "Toyota Camry", "Blue", 60000, 11000);
@@ -22,7 +18,6 @@ public class Main {
         inventory[6] = new Vehicle(101127, "Nissan Altima", "Gray", 82000, 6800);
         inventory[7] = new Vehicle(101128, "Hyundai Sonata", "Silver", 40000, 12500);
         inventory[8] = new Vehicle(101129, "Kia Sportage", "White", 35000, 14900);
-
         quantityOfVehicles = 9;
 
         int command;
@@ -37,17 +32,19 @@ public class Main {
             System.out.println("  6 - Quit");
             System.out.print("Enter your command: ");
 
-            command = scanner.nextInt();
-
+            command = ConsoleHelper.promptForInt("Enter your command");
             switch (command) {
                 case 1:
                     listAllVehicle();
                     break;
                 case 2:
-                    findVehidlesByMakeModel();
+                    findVehiclesByMakeModel();
                     break;
                 case 3:
                     findVehiclesByPrice();
+                    break;
+                case 4:
+                    findVehiclesByColor();
                     break;
                 case 5:
                     addAVehicle();
@@ -61,6 +58,10 @@ public class Main {
             }
         }
     }
+    private static void displayVehicle(Vehicle v){
+        System.out.print(v.getVehicleId() + " ");
+        System.out.println(v.getColor() + " " + v.getMakeModel());
+    }
 
     private static void listAllVehicle() {
         System.out.println("Listing out vehicles....");
@@ -68,22 +69,77 @@ public class Main {
             if(v == null){
                 continue;
             }
-            System.out.println(v.getVehicleId());
-            System.out.println(v.getColor() + " " + v.getMakeModel());
-            //todo:
+           displayVehicle(v);
         }
     }
 
     private static void findVehiclesByPrice() {
-        //todo: finish search by makemodel
+        float minPrice = ConsoleHelper.promptForFloat("Please enter the min price");
+        float maxPrice = ConsoleHelper.promptForFloat("Please enter the max price");
+        for(Vehicle v : inventory){
+            if(v == null){
+                continue;
+            }
+            if(v.getPrice()>= minPrice && v.getPrice()<= maxPrice){
+                displayVehicle(v);
+            }
+
+        }
     }
 
-    private static void findVehidlesByMakeModel() {
-        //todo: finish search by price
+    private static void findVehiclesByColor() {
+        String color = ConsoleHelper.promptForString("Please enter the color");
+        for (Vehicle v : inventory) {
+            if (v == null) {
+                continue;
+            }
+            if(v.getColor().toLowerCase().contains(color.toLowerCase())){
+                displayVehicle(v);
+
+            }
+        }
     }
+
+
+    private static void findVehiclesByMakeModel() {
+        String makeModelToSearchFor = ConsoleHelper.promptForString("Please enter a make/model to search for");
+
+        for(Vehicle v : inventory){
+            if(v == null){
+                continue;
+            }
+            if(v.getMakeModel().toLowerCase().contains(makeModelToSearchFor.toLowerCase())) {
+                displayVehicle(v);
+            }
+        }
+    }
+
 
 
     private static void addAVehicle() {
-        //todo: prompt user for new vehicle data and add new vehicle.
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.print("Please enter the price: ");
+//        float price = scanner.nextFloat();
+//        scanner.nextLine();
+        long vehicleId = ConsoleHelper.promptForLong("What is the vehicle ID");
+        String makeModel = ConsoleHelper.promptForString("Please enter the make/mode");
+        String color = ConsoleHelper.promptForString("Please enter the color");
+        int odometerReading = ConsoleHelper.promptForInt("Please enter the mileage");
+        float price = ConsoleHelper.promptForFloat("What is the cost of the vehicle");
+
+
+
+        //Vehicle newVehicle = new Vehicle(vehicleId, makeModel, color, odometerReading, price);
+        //inventory[quantityOfVehicles] = newVehicle;
+
+        inventory[quantityOfVehicles] = new Vehicle(vehicleId, makeModel, color, odometerReading, price);
+        quantityOfVehicles++;
+
+
+
+
+
+
+
     }
 }
